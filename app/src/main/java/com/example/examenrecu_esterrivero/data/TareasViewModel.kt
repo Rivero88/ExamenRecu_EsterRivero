@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlin.random.Random
 
 class TareasViewModel: ViewModel() {
 
@@ -17,6 +19,63 @@ class TareasViewModel: ViewModel() {
 
     fun TareaNueva (nuevoNombreTarea: String){
         nombreTarea = nuevoNombreTarea
+    }
+
+    fun AnnadirHora (tareaTipo: Tarea, tareas: ArrayList<Tarea>){
+        val hora = 1
+        var totalHoras = 0
+        var textoUltAccionAct = ""
+        var textoResumenAct = ""
+        var textoTotalHorasAct = ""
+
+        for(tarea in tareas){
+            if(tarea.nombre == tareaTipo.nombre){
+                tarea.recuentoHoras += hora
+                textoUltAccionAct = "Se añade $hora hora a ${tarea.nombre}"
+            }
+            if(tarea.recuentoHoras > 0){
+                textoResumenAct += "La tarea: ${tarea.nombre} Precio: ${tarea.precio} Horas: ${tarea.recuentoHoras}\n"
+            }
+            totalHoras += tarea.recuentoHoras
+            textoTotalHorasAct = "Total horas: $totalHoras"
+        }
+
+        _uiState.update {
+            actualizarTexto -> actualizarTexto.copy(
+                textoUltAccion = textoUltAccionAct,
+                textoResumen = textoResumenAct,
+                textoTotalHoras = textoTotalHorasAct
+            )
+        }
+
+    }
+
+    fun AnnadirNuevaTarea(tareas: ArrayList<Tarea>, nombreNuevaTarea: String){
+
+        var tareaNueva = Tarea("", 0, 0)
+        var textoUltAccionAct = ""
+        var precioNuevo = Random.nextInt(1,15)
+
+        for(tarea in tareas){
+            if("".equals(nombreNuevaTarea)) {
+                textoUltAccionAct = "El valor es vacío o en blanco."
+            }else if(tarea.nombre.equals(nombreNuevaTarea, ignoreCase = true)){
+                textoUltAccionAct = "Ya existe una tarea llamada así."
+            }else if(!tarea.nombre.equals(nombreNuevaTarea, ignoreCase = true)){
+            tarea.nombre = nombreNuevaTarea
+            tarea.precio = precioNuevo
+            tareas.add(tareaNueva)
+            textoUltAccionAct = "Añadida tarea ${tareaNueva.nombre}"
+            }
+        }
+
+        _uiState.update {
+            actualizarTexto -> actualizarTexto.copy(
+                textoUltAccion = textoUltAccionAct,
+                nuevasTareas = tareas
+
+            )
+        }
     }
 
 }

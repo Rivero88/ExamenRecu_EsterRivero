@@ -1,3 +1,3 @@
 package com.example.examenrecu_esterrivero.data
 
-data class Tarea(val nombre:String, val precio:Int, var recuentoHoras: Int)
+data class Tarea(var nombre:String, var precio:Int, var recuentoHoras: Int)

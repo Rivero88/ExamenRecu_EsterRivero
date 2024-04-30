@@ -64,7 +64,7 @@ fun PantallaPrincipal(tareas: ArrayList<Tarea>, viewModelTareas: TareasViewModel
 
     Column {
         PantallaPrincipalTareas(tareas =tareas , viewModelTareas = viewModelTareas)
-        PantallaTextEditorYBoton(viewModelTareas = viewModelTareas)
+        PantallaTextEditorYBoton(viewModelTareas = viewModelTareas, tareas = tareas)
         PantallaTextosInferiores(uiState = uiState)
     }
 
@@ -93,7 +93,7 @@ fun PantallaPrincipalTareas(modifier : Modifier = Modifier, tareas: ArrayList<Ta
                             .fillMaxWidth()
                             .background(Color.Cyan)
                             .padding(start = 12.dp, top = 12.dp, bottom = 12.dp))
-                    Button(onClick = { /*TODO*/ },
+                    Button(onClick = { viewModelTareas.AnnadirHora(tarea, tareas) },
                         modifier.align(Alignment.CenterHorizontally)) {
                         Text(text = "+")
                     }
@@ -105,7 +105,7 @@ fun PantallaPrincipalTareas(modifier : Modifier = Modifier, tareas: ArrayList<Ta
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaTextEditorYBoton(viewModelTareas: TareasViewModel){
+fun PantallaTextEditorYBoton(viewModelTareas: TareasViewModel, tareas: ArrayList<Tarea>){
     Row (modifier = Modifier.padding(10.dp)) {
         TextField(value = viewModelTareas.nombreTarea,
             onValueChange = { viewModelTareas.TareaNueva(it) },
@@ -117,7 +117,7 @@ fun PantallaTextEditorYBoton(viewModelTareas: TareasViewModel){
                 .weight(1f)
                 .padding(5.dp)
         )
-        Button(onClick = { /*TODO*/ },
+        Button(onClick = { viewModelTareas.AnnadirNuevaTarea(tareas, viewModelTareas.nombreTarea) },
             modifier = Modifier
                 .weight(1f)
                 .padding(10.dp)) {
